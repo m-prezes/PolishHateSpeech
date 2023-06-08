@@ -21,13 +21,14 @@ def train(model, train_data_loader, val_data_loader, compute_loss, optimizer, nu
                                        total=len(train_data_loader)):
             data['input_ids'] = data['input_ids'].squeeze(1).to(device)
             data['attention_mask'] = data['attention_mask'].squeeze(1).to(device)
-            data['token_type_ids'] = data['token_type_ids'].squeeze(1).to(device)
+            # data['token_type_ids'] = data['token_type_ids'].squeeze(1).to(device)
 
             targets = targets.to(device)
             model.train()
             optimizer.zero_grad()
         
             outputs = model(data)
+            print(torch.cat((outputs, targets.view(-1, 1)), 1))
 
             loss = compute_loss(outputs, targets.view(-1, 1).to(torch.float32))
 
@@ -35,8 +36,8 @@ def train(model, train_data_loader, val_data_loader, compute_loss, optimizer, nu
             optimizer.step()
 
 
-        # val_loss, val_acc = evaluate(model, val_data_loader, compute_loss, device)
-        # print(f"Epoch [{epoch+1}/{num_epochs}], Validation Loss: {val_loss}, Validation Acc: {val_acc}")
+        # val_loss, val_acc, val_gmean = evaluate(model, val_data_loader, compute_loss, device)
+        # print(f"Epoch [{epoch+1}/{num_epochs}], Validation Loss: {val_loss}, Validation Acc: {val_acc}, Validation GMean: {val_gmean}")
 
     torch.save(model.state_dict(), 'model.pth')
     

@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import yaml
 from pathlib import Path
+from utils import preprocessing_text
 
 
 params = yaml.safe_load(open('params.yaml'))['prepare']
@@ -25,6 +26,12 @@ X_train.reset_index(drop=True, inplace=True)
 X_val.reset_index(drop=True, inplace=True)
 y_train.reset_index(drop=True, inplace=True)
 y_val.reset_index(drop=True, inplace=True)
+
+
+
+X_train[0] = X_train[0].apply(lambda x: preprocessing_text(x))
+X_val[0] = X_val[0].apply(lambda x: preprocessing_text(x))
+
 
 
 Path('data/prepared/train').mkdir(parents=True, exist_ok=True)

@@ -10,3 +10,4 @@ sacremoses
 nlpaug
 nltk
 streamlit
+dvc_gdrive

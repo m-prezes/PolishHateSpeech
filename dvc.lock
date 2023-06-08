@@ -1,5 +1,29 @@
 schema: '2.0'
 stages:
+  train:
+    cmd: python src/train.py data/augmented/train/X_train.csv data/augmented/train/y_train.csv
+      data/prepared/val/X_val.csv data/prepared/val/y_val.csv
+    deps:
+    - path: data/augmented/train/X_train.csv
+      md5: 237dc7a2a8b496a6c049bf2e713b2c65
+      size: 490703
+    - path: data/augmented/train/y_train.csv
+      md5: b48222cb94e00d9c0e9b1c3ea3f169dd
+      size: 23835
+    - path: data/prepared/val/X_val.csv
+      md5: e021276c989fd36ccbf9bb003dcb40a4
+      size: 202833
+    - path: data/prepared/val/y_val.csv
+      md5: ce5b115ed38fe2c030c2dbe94449a893
+      size: 6027
+    - path: src/train.py
+      md5: 52a9715ce38bb6ea8bf733e42c219382
+      size: 2694
+    params:
+      params.yaml:
+        train.batch_size: 4
+        train.epochs: 1
+        train.lr: 1e-05
   evaluate:
     cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt
     deps:
@@ -10,8 +34,8 @@ stages:
       md5: 627f40c5d32e7b7b024f5420f6df3ec1
       size: 99677
     - path: src/evaluate.py
-      md5: 2f70234771c153c1a4dad771d3b32de4
-      size: 2090
+      md5: 1d29431883c09dfd0b5e298249570b64
+      size: 2601
     params:
       params.yaml:
         evaluate.batch_size: 32

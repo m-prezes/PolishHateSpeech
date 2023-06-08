@@ -18,7 +18,8 @@ class PolishHateSpeechDataset(Dataset):
             text,
             padding='max_length',
             add_special_tokens=True,
-            return_tensors="pt"
+            return_tensors="pt",
+            max_length=128,
         )
         
         label = torch.tensor(label, dtype=torch.float)

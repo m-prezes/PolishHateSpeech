@@ -3,6 +3,8 @@ from src.model import Model
 import streamlit as st
 import pandas as pd
 
+from src.utils import preprocessing_text
+
 
 DATA_DIR = 'data/train'
 MODEL_PATH = 'model.pth'
@@ -38,6 +40,18 @@ class App:
     def __init__(self) -> None:
         self.model = load_model()
         self.train_data = load_data()
+
+    def predict(self, text):
+        preprocessed_text = preprocessing_text(text)
+        embeddings = self.model.tokenizer(preprocessed_text,
+                                            padding='max_length',
+                                            add_special_tokens=True,
+                                            return_tensors="pt",
+                                            max_length=128,
+                                        )
+        prediction = self.model(embeddings)
+        prediction = torch.round(prediction).item()
+        return prediction
 
     def run(self):
         st.title("Detekcja mowy nienawiści")
@@ -76,17 +90,9 @@ class App:
         st.header("Demonstracja")
         text = st.text_area("Wprowadź treść")
         if st.button("Sprawdź"):
-            embeddings = self.model.tokenizer(text,
-                                                padding='max_length',
-                                                add_special_tokens=True,
-                                                return_tensors="pt"
-                                            )
-            prediction = self.model(embeddings)
-            print(prediction)
-            prediction = torch.round(prediction).item()
+            prediction = self.predict(text)
             prediction_label = "Mowa nienawiści" if prediction == 1 else "Brak mowy nienawiści"
             prediction_border_color = "red" if prediction == 1 else "green"
-            # html border element
             col1, col2 = st.columns(2)
             col1.write(f"Komentarz został sklasyfikowany jako:")
             col2.markdown(f"<div style='border: 2px solid {prediction_border_color}; padding: 10px; border-radius: 5px;'>{prediction_label}</div>", unsafe_allow_html=True)

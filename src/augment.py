@@ -39,7 +39,7 @@ augmented_df = pd.DataFrame({'text': augmented_data, 'label': augmented_labels})
 standard_df = pd.DataFrame({'text': train_txt[0], 'label': train_labels[0]})
 
 
-n_to_undersampling = augmented_df.shape[0] * proportion
+n_to_undersampling = augmented_df.shape[0] * 2 * proportion
 undersampling = standard_df[standard_df['label'] == 0].sample(n_to_undersampling, random_state=seed).reset_index(drop=True)
 
 data_to_augument_df = pd.DataFrame({'text': data_to_augment[0], 'label': np.ones(data_to_augment.shape[0])})

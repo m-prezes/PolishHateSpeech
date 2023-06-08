@@ -3,12 +3,12 @@ prepare:
   val_split: 0.2
 augment:
   stopwords:
-  aug_max: 1
-  proportion: 4
+  aug_max: 2
+  proportion: 1
   seed: 2137
 train:
   epochs: 1
-  lr: 0.001
-  batch_size: 32
+  lr: 0.00001
+  batch_size: 4
 evaluate:
   batch_size: 32
