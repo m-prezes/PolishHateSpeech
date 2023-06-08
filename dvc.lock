@@ -1,18 +1,17 @@
 schema: '2.0'
 stages:
-  prepare:
-    cmd: python src/prepare.py data/train/text.txt data/train/labels.txt
+  evaluate:
+    cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt
     deps:
-    - path: data/train/labels.txt
-      md5: e9403b295e504463b1e7f46858676f3e
-      size: 30123
-    - path: data/train/text.txt
-      md5: 35ec79dd04bca563a46af0e0bb8d9981
-      size: 1003904
-    - path: src/prepare.py
-      md5: 337e56e586d4295caa4ab1a5e145f75e
-      size: 1344
+    - path: data/test/labels.txt
+      md5: 5d00a822efecac84f22d9c90d1025a90
+      size: 3000
+    - path: data/test/text.txt
+      md5: 627f40c5d32e7b7b024f5420f6df3ec1
+      size: 99677
+    - path: src/evaluate.py
+      md5: 2f70234771c153c1a4dad771d3b32de4
+      size: 2090
     params:
       params.yaml:
-        prepare.seed: 2137
-        prepare.val_split: 0.2
+        evaluate.batch_size: 32

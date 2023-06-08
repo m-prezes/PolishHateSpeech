@@ -8,16 +8,24 @@ stages:
     - src/prepare.py
     - data/train/text.txt
     - data/train/labels.txt
+  augment:
+    cmd: python src/augment.py data/prepared/train data/augmented/train
+    params:
+    - augment.seed
+    deps:
+    - src/augment.py
+    - data/prepared/train/X_train.csv
+    - data/prepared/train/y_train.csv
   train:
-    cmd: python src/train.py data/prepared/train/X_train.csv data/prepared/train/y_train.csv data/prepared/val/X_val.csv data/prepared/val/y_val.csv
+    cmd: python src/train.py data/augmented/train/X_train.csv data/augmented/train/y_train.csv data/prepared/val/X_val.csv data/prepared/val/y_val.csv
     params:
     - train.epochs
     - train.lr
     - train.batch_size
     deps:
     - src/train.py
-    - data/prepared/train/X_train.csv 
-    - data/prepared/train/y_train.csv 
+    - data/augmented/train/X_train.csv 
+    - data/augmented/train/y_train.csv 
     - data/prepared/val/X_val.csv 
     - data/prepared/val/y_val.csv
   evaluate:

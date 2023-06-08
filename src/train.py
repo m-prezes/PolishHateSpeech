@@ -17,7 +17,7 @@ from tqdm import tqdm
 
 def train(model, train_data_loader, val_data_loader, compute_loss, optimizer, num_epochs, device):
     for epoch in range(num_epochs):
-        for data, targets in tqdm(train_data_loader, f"Epoch {epoch+1}/{num_epochs}",
+        for i, (data, targets) in tqdm(enumerate(train_data_loader), f"Epoch {epoch+1}/{num_epochs}",
                                        total=len(train_data_loader)):
             data['input_ids'] = data['input_ids'].squeeze(1).to(device)
             data['attention_mask'] = data['attention_mask'].squeeze(1).to(device)
@@ -35,11 +35,11 @@ def train(model, train_data_loader, val_data_loader, compute_loss, optimizer, nu
             optimizer.step()
 
 
-        val_loss, val_acc = evaluate(model, val_data_loader, compute_loss, device)
-        print(f"Epoch [{epoch+1}/{num_epochs}], Validation Loss: {val_loss}, Validation Acc: {val_acc}")
+        # val_loss, val_acc = evaluate(model, val_data_loader, compute_loss, device)
+        # print(f"Epoch [{epoch+1}/{num_epochs}], Validation Loss: {val_loss}, Validation Acc: {val_acc}")
 
     torch.save(model.state_dict(), 'model.pth')
-
+    
 
     return model
 
@@ -60,7 +60,6 @@ if __name__=="__main__":
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = Model()
-    
     model.to(device)
     tokenizer = model.tokenizer
 

@@ -7,3 +7,6 @@ torch
 transformers
 scikit-learn
 sacremoses
+nlpaug
+nltk
+streamlit

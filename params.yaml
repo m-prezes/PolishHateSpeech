@@ -1,6 +1,11 @@
 prepare:
   seed: 2137
   val_split: 0.2
+augment:
+  stopwords:
+  aug_max: 1
+  proportion: 4
+  seed: 2137
 train:
   epochs: 1
   lr: 0.001
