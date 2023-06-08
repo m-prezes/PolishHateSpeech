@@ -1,0 +1,30 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py data/train/text.txt data/train/labels.txt
+    params:
+    - prepare.seed
+    - prepare.val_split
+    deps:
+    - src/prepare.py
+    - data/train/text.txt
+    - data/train/labels.txt
+  train:
+    cmd: python src/train.py data/prepared/train/X_train.csv data/prepared/train/y_train.csv data/prepared/val/X_val.csv data/prepared/val/y_val.csv
+    params:
+    - train.epochs
+    - train.lr
+    - train.batch_size
+    deps:
+    - src/train.py
+    - data/prepared/train/X_train.csv 
+    - data/prepared/train/y_train.csv 
+    - data/prepared/val/X_val.csv 
+    - data/prepared/val/y_val.csv
+  evaluate:
+    cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt
+    params:
+    - evaluate.batch_size
+    deps:
+    - src/evaluate.py
+    - data/test/text.txt
+    - data/test/labels.txt

@@ -3,3 +3,7 @@ pandas
 matplotlib
 seaborn
 dvc
+torch 
+transformers
+scikit-learn
+sacremoses
