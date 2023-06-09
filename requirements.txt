@@ -11,3 +11,5 @@ nlpaug
 nltk
 streamlit
 dvc_gdrive
+black
+isort
