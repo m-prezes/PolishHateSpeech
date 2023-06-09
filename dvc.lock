@@ -30,17 +30,22 @@ stages:
       size: 2189
     params:
       params.yaml:
+        augment.aug_max: 2
+        augment.proportion: 1
         augment.seed: 2137
+        augment.stopwords:
+        augment.use_augment: true
+        augment.use_sample: true
   train:
     cmd: python src/train.py data/augmented/train/X_train.csv data/augmented/train/y_train.csv
       data/prepared/val/X_val.csv data/prepared/val/y_val.csv
     deps:
     - path: data/augmented/train/X_train.csv
-      md5: 9b3821775be8e6c84132dc9719add016
-      size: 803845
+      md5: 74ac8d9330a89c4c2f853481aec5067a
+      size: 285153
     - path: data/augmented/train/y_train.csv
-      md5: c9893d94adc59549a28811609be49aa6
-      size: 40160
+      md5: 319353dbcc9c83d12dbf84ffaa6dbbd9
+      size: 13620
     - path: data/prepared/val/X_val.csv
       md5: 09695b932b29cb3c4b1c9fa8d13ddc57
       size: 202093
@@ -64,6 +69,9 @@ stages:
     - path: data/test/text.txt
       md5: 627f40c5d32e7b7b024f5420f6df3ec1
       size: 99677
+    - path: model.pth
+      md5: bb88e1cbb18fbde1eb142c865f7f74b6
+      size: 327705493
     - path: src/evaluate.py
       md5: 21c57036f453f54de4bf83333300181c
       size: 2701
@@ -72,5 +80,5 @@ stages:
         evaluate.batch_size: 32
     outs:
     - path: scores/scores.json
-      md5: 77c09011e8cb4a750f1db492374c37e1
+      md5: 5fbf74c482f40cb61c29a7694eb486a1
       size: 72
