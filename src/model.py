@@ -1,6 +1,6 @@
-from torch import nn
 import torch
-from transformers import AutoTokenizer, AutoModel
+from torch import nn
+from transformers import AutoModel, AutoTokenizer
 
 
 class Model(nn.Module):
@@ -11,12 +11,11 @@ class Model(nn.Module):
 
         # for param in self.herbert.parameters():
         #     param.requires_grad = False
-        
+
         self.linear = nn.Linear(768, 1)
-    
+
     def forward(self, embeddings):
         output = self.herbert(**embeddings)
-        output = output['pooler_output']
+        output = output["pooler_output"]
         output = self.linear(output)
         return nn.Sigmoid()(output)
-    

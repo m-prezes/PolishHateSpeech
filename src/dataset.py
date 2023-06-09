@@ -1,5 +1,6 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader, Dataset
+
 
 class PolishHateSpeechDataset(Dataset):
     def __init__(self, texts, labels, tokenizer):
@@ -16,13 +17,12 @@ class PolishHateSpeechDataset(Dataset):
 
         embbedings = self.tokenizer(
             text,
-            padding='max_length',
+            padding="max_length",
             add_special_tokens=True,
             return_tensors="pt",
             max_length=128,
         )
-        
-        label = torch.tensor(label, dtype=torch.float)
 
+        label = torch.tensor(label, dtype=torch.float)
 
         return embbedings, label

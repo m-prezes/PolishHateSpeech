@@ -1,20 +1,18 @@
-from pathlib import Path
 import sys
+from pathlib import Path
+
 import pandas as pd
 import torch
-from sklearn.metrics import accuracy_score
-from tqdm import tqdm
 import yaml
-
-from model import Model
+from imblearn.metrics import geometric_mean_score
+from sklearn.metrics import accuracy_score
+from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from dataset import PolishHateSpeechDataset
-
-from torch.utils.data import DataLoader
-
+from model import Model
 from utils import preprocessing_text
 
-from imblearn.metrics import geometric_mean_score
 
 def evaluate(model, data_loader, compute_loss, device):
     model.eval()
@@ -27,8 +25,8 @@ def evaluate(model, data_loader, compute_loss, device):
 
     with torch.no_grad():
         for data, targets in tqdm(data_loader, f"Evaluate", total=len(data_loader)):
-            data['input_ids'] = data['input_ids'].squeeze(1).to(device)
-            data['attention_mask'] = data['attention_mask'].squeeze(1).to(device)
+            data["input_ids"] = data["input_ids"].squeeze(1).to(device)
+            data["attention_mask"] = data["attention_mask"].squeeze(1).to(device)
             # data['token_type_ids'] = data['token_type_ids'].squeeze(1).to(device)
 
             targets = targets.to(device)
@@ -54,10 +52,9 @@ def evaluate(model, data_loader, compute_loss, device):
     return average_loss, accuracy, gmean_accuracy
 
 
-
-if __name__=="__main__":
-    params = yaml.safe_load(open('params.yaml'))['evaluate']
-    batch_size = params['batch_size']
+if __name__ == "__main__":
+    params = yaml.safe_load(open("params.yaml"))["evaluate"]
+    batch_size = params["batch_size"]
 
     test_texts = pd.read_fwf(Path(sys.argv[1]), header=None)
     test_labels = pd.read_fwf(Path(sys.argv[2]), header=None)
@@ -65,8 +62,8 @@ if __name__=="__main__":
     test_texts[0] = test_texts[0].apply(lambda x: preprocessing_text(x))
 
     model = Model()
-    model.load_state_dict(torch.load('model.pth'))
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.load_state_dict(torch.load("model.pth"))
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
     test_dataset = PolishHateSpeechDataset(test_texts, test_labels, model.tokenizer)

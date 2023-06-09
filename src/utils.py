@@ -1,4 +1,3 @@
-
 emoji_map = {
     "😀": ":)",
     "😃": ":D",
@@ -53,13 +52,14 @@ emoji_map = {
     "🎈": "<o/",
 }
 
+
 def preprocessing_text(text):
     text = text.lower()
-    text = text.replace('\n', ' ')
-    text = text.replace('\\"', '\"')
-    text = text.replace('RT', '')
-    text = text.replace('\u0026', '&')
-    
+    text = text.replace("\n", " ")
+    text = text.replace('\\"', '"')
+    text = text.replace("RT", "")
+    text = text.replace("\u0026", "&")
+
     for emoji in emoji_map.keys():
         text = text.replace(emoji, emoji_map[emoji])
 
