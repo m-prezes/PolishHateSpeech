@@ -4,6 +4,7 @@ stages:
     params:
     - prepare.seed
     - prepare.val_split
+
     deps:
     - src/prepare.py
     - data/train/text.txt
@@ -12,6 +13,11 @@ stages:
     cmd: python src/augment.py data/prepared/train data/augmented/train
     params:
     - augment.seed
+    - augment.use_sample
+    - augment.use_augment
+    - augment.stopwords
+    - augment.aug_max
+    - augment.proportion
     deps:
     - src/augment.py
     - data/prepared/train/X_train.csv
@@ -36,6 +42,7 @@ stages:
     - src/evaluate.py
     - data/test/text.txt
     - data/test/labels.txt
+    - model.pth
     metrics:
     - scores/scores.json:
         cache: false
