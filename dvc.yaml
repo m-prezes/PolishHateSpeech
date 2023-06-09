@@ -29,10 +29,13 @@ stages:
     - data/prepared/val/X_val.csv 
     - data/prepared/val/y_val.csv
   evaluate:
-    cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt
+    cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt scores/scores.json
     params:
     - evaluate.batch_size
     deps:
     - src/evaluate.py
     - data/test/text.txt
     - data/test/labels.txt
+    metrics:
+    - scores/scores.json:
+        cache: false

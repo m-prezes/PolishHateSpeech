@@ -2,6 +2,8 @@ prepare:
   seed: 2137
   val_split: 0.2
 augment:
+  use_sample: False
+  use_augment: False
   stopwords:
   aug_max: 2
   proportion: 1

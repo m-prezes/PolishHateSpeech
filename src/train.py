@@ -36,7 +36,6 @@ def train(
             optimizer.zero_grad()
 
             outputs = model(data)
-            print(torch.cat((outputs, targets.view(-1, 1)), 1))
 
             loss = compute_loss(outputs, targets.view(-1, 1).to(torch.float32))
 

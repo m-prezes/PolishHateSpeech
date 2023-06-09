@@ -7,6 +7,8 @@ import yaml
 from nlpaug.augmenter.word import SynonymAug
 
 params = yaml.safe_load(open("params.yaml"))["augment"]
+use_augment = params["use_augment"]
+use_sample = params["use_sample"]
 seed = params["seed"]
 stopwords = params["stopwords"]
 aug_max = params["aug_max"]
@@ -29,23 +31,30 @@ train_labels = pd.read_csv(train_labels_path, header=None)
 data_to_augment = train_txt[train_labels[0] == 1]
 augmented_labels = np.ones(data_to_augment.shape[0])
 
-
-augmenter = SynonymAug(
-    aug_src="wordnet", lang="pol", aug_min=1, stopwords=stopwords, aug_max=aug_max
-)
-augmented_data = data_to_augment[0].map(lambda x: augmenter.augment(x)[0])
-
-
-augmented_df = pd.DataFrame({"text": augmented_data, "label": augmented_labels})
 standard_df = pd.DataFrame({"text": train_txt[0], "label": train_labels[0]})
 
 
-n_to_undersampling = augmented_df.shape[0] * 2 * proportion
-undersampling = (
-    standard_df[standard_df["label"] == 0]
-    .sample(n_to_undersampling, random_state=seed)
-    .reset_index(drop=True)
-)
+if use_augment:
+    augmenter = SynonymAug(
+        aug_src="wordnet", lang="pol", aug_min=1, stopwords=stopwords, aug_max=aug_max
+    )
+    augmented_data = data_to_augment[0].map(lambda x: augmenter.augment(x)[0])
+
+    augmented_df = pd.DataFrame({"text": augmented_data, "label": augmented_labels})
+else:
+    augmented_df = pd.DataFrame({"text": [], "label": []})
+
+
+if use_sample:
+    n_to_undersampling = augmented_df.shape[0] * 2 * proportion
+    undersampling = (
+        standard_df[standard_df["label"] == 0]
+        .sample(n_to_undersampling, random_state=seed)
+        .reset_index(drop=True)
+    )
+else:
+    undersampling = standard_df[standard_df["label"] == 0].reset_index(drop=True)
+
 
 data_to_augument_df = pd.DataFrame(
     {"text": data_to_augment[0], "label": np.ones(data_to_augment.shape[0])}

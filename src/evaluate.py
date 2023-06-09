@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 
@@ -34,8 +35,6 @@ def evaluate(model, data_loader, compute_loss, device):
 
             outputs = model(data)
 
-            print(torch.cat((outputs, targets), 1))
-
             predicted = torch.round(outputs)
             all_predicted.extend(predicted.cpu().numpy().flatten())
             all_targets.extend(targets.cpu().numpy().flatten())
@@ -58,6 +57,7 @@ if __name__ == "__main__":
 
     test_texts = pd.read_fwf(Path(sys.argv[1]), header=None)
     test_labels = pd.read_fwf(Path(sys.argv[2]), header=None)
+    scores_file = Path(sys.argv[3])
 
     test_texts[0] = test_texts[0].apply(lambda x: preprocessing_text(x))
 
@@ -73,3 +73,6 @@ if __name__ == "__main__":
 
     loss, acc, gmean = evaluate(model, test_data_loader, compute_loss, device)
     print(f"Test Loss: {loss}, Test Acc: {acc}, Test GMean: {gmean}")
+
+    with open(scores_file, 'w') as f:
+        json.dump({'loss': loss, 'acc': acc, 'gmean': gmean}, f)
