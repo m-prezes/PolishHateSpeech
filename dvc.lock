@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py data/train/text.txt data/train/labels.txt
+    deps:
+    - path: data/train/labels.txt
+      md5: e9403b295e504463b1e7f46858676f3e
+      size: 30123
+    - path: data/train/text.txt
+      md5: 35ec79dd04bca563a46af0e0bb8d9981
+      size: 1003904
+    - path: src/prepare.py
+      md5: 5afb03c9c6406c94f91169b79cda5239
+      size: 1308
+    params:
+      params.yaml:
+        prepare.seed: 2137
+        prepare.val_split: 0.2
+  augment:
+    cmd: python src/augment.py data/prepared/train data/augmented/train
+    deps:
+    - path: data/prepared/train/X_train.csv
+      md5: 7c0e1402a4b4b3ad727662eeb2362937
+      size: 803845
+    - path: data/prepared/train/y_train.csv
+      md5: ce275d61036446e15ccc65acbbbf246c
+      size: 24096
+    - path: src/augment.py
+      md5: b2cb4af9f66ca0d7d96b4ac8218f7ce8
+      size: 2189
+    params:
+      params.yaml:
+        augment.seed: 2137
+  train:
+    cmd: python src/train.py data/augmented/train/X_train.csv data/augmented/train/y_train.csv
+      data/prepared/val/X_val.csv data/prepared/val/y_val.csv
+    deps:
+    - path: data/augmented/train/X_train.csv
+      md5: 9b3821775be8e6c84132dc9719add016
+      size: 803845
+    - path: data/augmented/train/y_train.csv
+      md5: c9893d94adc59549a28811609be49aa6
+      size: 40160
+    - path: data/prepared/val/X_val.csv
+      md5: 09695b932b29cb3c4b1c9fa8d13ddc57
+      size: 202093
+    - path: data/prepared/val/y_val.csv
+      md5: ce5b115ed38fe2c030c2dbe94449a893
+      size: 6027
+    - path: src/train.py
+      md5: 7b07cab004c85d3df558a8321156e538
+      size: 2697
+    params:
+      params.yaml:
+        train.batch_size: 4
+        train.epochs: 1
+        train.lr: 1e-05
+  evaluate:
+    cmd: python src/evaluate.py data/test/text.txt data/test/labels.txt scores/scores.json
+    deps:
+    - path: data/test/labels.txt
+      md5: 5d00a822efecac84f22d9c90d1025a90
+      size: 3000
+    - path: data/test/text.txt
+      md5: 627f40c5d32e7b7b024f5420f6df3ec1
+      size: 99677
+    - path: src/evaluate.py
+      md5: 21c57036f453f54de4bf83333300181c
+      size: 2701
+    params:
+      params.yaml:
+        evaluate.batch_size: 32
+    outs:
+    - path: scores/scores.json
+      md5: 77c09011e8cb4a750f1db492374c37e1
+      size: 72
