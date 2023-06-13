@@ -38,11 +38,11 @@ def load_data():
 
     return train_data
 
-
+@st.cache_data
 def get_sample_harmful_data(n_rows, train_data):
     return train_data[train_data["tag"] == "Harmful"].sample(n_rows)["text"]
 
-
+@st.cache_data
 def get_sample_non_harmful_data(n_rows, train_data):
     return train_data[train_data["tag"] == "Non-harmful"].sample(n_rows)["text"]
 
