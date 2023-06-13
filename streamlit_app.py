@@ -9,9 +9,14 @@ from src.utils import preprocessing_text
 DATA_DIR = "data/train"
 MODEL_PATH = "model.pth"
 HATESPEECH_IMAGE = "static/hatespeech.png"
+MEM_IMAGE = "static/mem.png"
+POLEVAL_IMAGE = "static/poleval.png"
 DVC_IMAGE = "static/dvc.png"
 NLPAUG_IMAGE = "static/nlp_aug.png"
 STREAMLIT_IMAGE = "static/streamlit.png"
+IDEA1_IMAGE = "static/idea1.png"
+IDEA2_IMAGE = "static/idea2.png"
+IDEA3_IMAGE = "static/idea3.png"
 
 
 @st.cache_data
@@ -78,6 +83,9 @@ class App:
             "Aplikacja będzie przydatna dla osób, które chcą uniknąć kontaktu z mową nienawiści w internecie i umożliwi filtrowanie lub oznaczanie nieodpowiednich treści.",
             "W ramach naszej pracy skupiliśmy się na jezyku polskim, dla którego nie istnieje tak dużo rozwiązań w przeciwieństwie do języka angielskiego.",
         )
+        _, col_image, _ = st.columns([1, 8, 1])
+        col_image.image(Image.open(MEM_IMAGE), use_column_width=True)
+
 
         st.subheader("Cel analityczny")
         st.write(
@@ -85,6 +93,8 @@ class App:
             "Z racji małej ilości dostępnych danych jest to dość trudne zadanie. Dodatkowo wykorzystywany zbiór z konkursu PolEval2019 jest niezbalansowany, a autorzy podają baseline",
             "na poziomie około 90\% dla trafności. W związku z tym wynik powyżej 90\% trafności oraz 75\% gmean będzie uznany za sukces.",
         )
+        _, col_image, _ = st.columns([1, 8, 1])
+        col_image.image(Image.open(POLEVAL_IMAGE), use_column_width=True)
 
         st.subheader("Wykorzystane narzędzia")
         col_dvc, col_nlpaug, col_streamlit = st.columns(3)
@@ -126,7 +136,18 @@ class App:
         st.table(get_sample_harmful_data(n_rows, self.train_data))
 
         st.subheader("Wykorzystane podejścia")
-        # TODO
+        st.text("1. HerBERT bez augmentacji danych")
+        _, col_image, _ = st.columns([1, 8, 1])
+        col_image.image(Image.open(IDEA1_IMAGE), use_column_width=True)
+
+        st.text("2. Distil RoBERTa bez augmentacji danych")
+        _, col_image, _ = st.columns([1, 8, 1])
+        col_image.image(Image.open(IDEA2_IMAGE), use_column_width=True)
+
+        st.text("3. Distil RoBERTa z augmentacją danych")
+        _, col_image, _ = st.columns([1, 8, 1])
+        col_image.image(Image.open(IDEA3_IMAGE), use_column_width=True)
+
 
         st.header("Demonstracja")
         text = st.text_area("Wprowadź treść")
@@ -145,5 +166,8 @@ class App:
 
 
 if __name__ == "__main__":
+    st.set_page_config(
+        page_title="DetekcjaMowyNienawisci",
+    )
     app = App()
     app.run()
